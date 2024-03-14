@@ -5,18 +5,19 @@ import { Router } from '@angular/router';
 import { AuthService } from '../../services/auth.service';
 
 @Component({
-  selector: 'app-login',
-  templateUrl: './login.component.html',
+  selector: 'app-register',
+  templateUrl: './register.component.html',
   standalone: true,
   imports: [ReactiveFormsModule],
 })
-export class LoginComponent {
+export class RegisterComponent {
   fb = inject(FormBuilder);
   http = inject(HttpClient);
+  authService = inject(AuthService)
   router = inject(Router);
-  authService = inject(AuthService);
 
   form = this.fb.nonNullable.group({
+    username: ['', Validators.required],
     email: ['', Validators.required],
     password: ['', Validators.required],
   });
@@ -25,7 +26,7 @@ export class LoginComponent {
   onSubmit(): void {
     const rawForm = this.form.getRawValue();  
     this.authService
-      .login(rawForm.email, rawForm.password)
+      .register(rawForm.email, rawForm.username, rawForm.password)
       .subscribe({
         next: () => {
         this.router.navigateByUrl('/');
